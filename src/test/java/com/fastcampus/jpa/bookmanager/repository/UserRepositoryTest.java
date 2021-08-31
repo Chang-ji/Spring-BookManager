@@ -1,9 +1,12 @@
 package com.fastcampus.jpa.bookmanager.repository;
 
 import com.fastcampus.jpa.bookmanager.domain.User;
+import org.assertj.core.util.Lists;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Sort;
 
 import java.time.LocalDateTime;
 
@@ -114,21 +117,80 @@ class UserRepositoryTest {
         userRepository.saveAndFlush(new User(5L,"martin", "martin131@fastcampus.com", LocalDateTime.now(), LocalDateTime.now()));
 
         System.out.println("---------------------------------------------------------------------");
+        System.out.println("---------------------------------------------------------------------");
+        System.out.println("---------------------------------------------------------------------");
 
-        System.out.println(userRepository.findByName("dennis"));
+// 쿼리 메소드 기본 실습 1 find, get, read, query, search, stream, findBy, findTop, findFirst
+//        System.out.println(userRepository.findByName("dennis"));
+//        System.out.println("findByEmail : " + userRepository.findByEmail("martin@fastcampus.com"));
+//        System.out.println("getByEmail : " + userRepository.getByEmail("martin@fastcampus.com"));
+//        System.out.println("readByEmail : " + userRepository.readByEmail("martin@fastcampus.com"));
+//        System.out.println("queryByEmail : " + userRepository.queryByEmail("martin@fastcampus.com"));
+//        System.out.println("searchByEmail : " + userRepository.searchByEmail("martin@fastcampus.com"));
+//        System.out.println("streamByEmail : " + userRepository.streamByEmail("martin@fastcampus.com"));
+//        System.out.println("findUserByEmail : " + userRepository.findUserByEmail("martin@fastcampus.com"));
+//        System.out.println("findUserByEmail : " + userRepository.findUserByEmail("martin@fastcampus.com"));
+//        System.out.println("findTop2ByName : " + userRepository.findTop2ByName("martin"));
+//        System.out.println("findFirst2ByName : " + userRepository.findFirst2ByName("martin"));
 
-        System.out.println("findByEmail : " + userRepository.findByEmail("martin@fastcampus.com"));
-        System.out.println("getByEmail : " + userRepository.getByEmail("martin@fastcampus.com"));
-        System.out.println("readByEmail : " + userRepository.readByEmail("martin@fastcampus.com"));
-        System.out.println("queryByEmail : " + userRepository.queryByEmail("martin@fastcampus.com"));
-        System.out.println("searchByEmail : " + userRepository.searchByEmail("martin@fastcampus.com"));
-        System.out.println("streamByEmail : " + userRepository.streamByEmail("martin@fastcampus.com"));
-        System.out.println("findUserByEmail : " + userRepository.findUserByEmail("martin@fastcampus.com"));
-        System.out.println("findUserByEmail : " + userRepository.findUserByEmail("martin@fastcampus.com"));
+// Equal이 포함이 됐느지 않됬지는 가 중요함
+// Before, After는 쿼리 문에서 Equal을 포함하지 않음
+// Between 양끝단의 값을 포함하고 있음
+// 쿼리 메소드 기본실습 2 findByEmailAndName, findByEmailOrName
+//        System.out.println("findFirst2ByName : " + userRepository.findByEmailAndName("martin@fastcampus.com","martin"));
+//        System.out.println("findFirst2ByName : " + userRepository.findByEmailOrName("karis@fastcampus.com","martin"));
+//        System.out.println("findByCreatedAtAfter : " + userRepository.findByCreatedAtAfter(LocalDateTime.now().minusDays(1L)));
+//        System.out.println("findByIdAfter : " + userRepository.findByIdAfter(4L));
+//        System.out.println("findByCreatedAtGreaterThan : " + userRepository.findByCreatedAtGreaterThan(LocalDateTime.now().minusDays(1L)));
+//        System.out.println("findByCreatedAtGreaterThanEqual : " + userRepository.findByCreatedAtGreaterThanEqual(LocalDateTime.now().minusDays(1L)));
+//        System.out.println("findByCreatedAtBetween : " + userRepository.findByCreatedAtBetween(LocalDateTime.now().minusDays(1L), LocalDateTime.now().plusDays(1L)));
+//        System.out.println("findByIdBetween : " + userRepository.findByIdBetween(1L, 3L));
+//        System.out.println("findByIdGreaterThanEqualAndIdLessThanEqual : " + userRepository.findByIdGreaterThanEqualAndIdLessThanEqual(1L, 3L));
+//        System.out.println("findByIdIsNotNull : " + userRepository.findByIdIsNotNull());
+// NotEmpty 정보 여부 중요
+//        System.out.println("findByIdIsNotEmpty : " + userRepository.findByAddressIsNotEmpty());
+//        System.out.println("findByNameIn : " + userRepository.findByNameIn(Lists.newArrayList("martin", "karis")));
+// Like 부분이 작동됨
+//        System.out.println("findByNameStartingWith : " + userRepository.findByNameStartingWith("martin"));
+//        System.out.println("---------------------------------------------------------------------");
+//        System.out.println("findByNameEndingWith : " + userRepository.findByNameEndingWith("tin"));
+//        System.out.println("---------------------------------------------------------------------");
+//        System.out.println("findByNameContains : " + userRepository.findByNameContains("art"));
+// Like 검색을 할때 %art% 처럼 단방향, 양방향으로 검색할 수 있음
+        System.out.println("findByNameLike : " + userRepository.findByNameLike("%art%"));
+
+    }
+
+    @Test
+    void pagingAndsortingTest() {
+        userRepository.saveAndFlush(new User(1L,"martin", "martin@fastcampus.com", LocalDateTime.now(), LocalDateTime.now()));
+        userRepository.saveAndFlush(new User(2L,"karis", "karis@fastcampus.com", LocalDateTime.now(), LocalDateTime.now()));
+        userRepository.saveAndFlush(new User(3L,"lottin", "lottin@fastcampus.com", LocalDateTime.now(), LocalDateTime.now()));
+        userRepository.saveAndFlush(new User(4L,"rise", "rise@fastcampus.com", LocalDateTime.now(), LocalDateTime.now()));
+        userRepository.saveAndFlush(new User(5L,"martin", "martin131@fastcampus.com", LocalDateTime.now(), LocalDateTime.now()));
+
+        System.out.println("---------------------------------------------------------------------");
+        System.out.println("---------------------------------------------------------------------");
+        System.out.println("---------------------------------------------------------------------");
 
 
-        System.out.println("findTop2ByName : " + userRepository.findTop2ByName("martin"));
-        System.out.println("findFirst2ByName : " + userRepository.findFirst2ByName("martin"));
+//        System.out.println("findTop1ByName : " + userRepository.findTop1ByName("martin"));
+//        System.out.println("findLast1ByName : " + userRepository.findLast1ByName("martin"));
+//        System.out.println("findTop1ByNameOrderByIdDesc : " + userRepository.findTop1ByNameOrderByIdDesc("martin"));
+//        System.out.println("findTopByNameOrderByIdDesc : " + userRepository.findTopByNameOrderByIdDesc("martin"));
+//  Sort 부분 Naming 기반으로 코딩할 것인지 파라미터 기반으로 코딩할 것인지 결정
+//        System.out.println("findFirstByNameWithSortParams : " + userRepository.findFirstByName("martin", getSort()));
 
+        // 페이지 기반 쿼리메소드 getTotalElements, getContent 값을 사용
+        System.out.println("findByNameWithPaging : " + userRepository.findByName("martin", PageRequest.of(1, 1, Sort.by(Sort.Order.desc("id")))).getTotalElements());
+
+    }
+
+    private Sort getSort() {
+        return Sort.by(
+                Sort.Order.desc("id"),
+                Sort.Order.desc("email"),
+                Sort.Order.desc("createdAt")
+        );
     }
 }
