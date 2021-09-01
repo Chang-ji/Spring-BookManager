@@ -1,8 +1,10 @@
 package com.fastcampus.jpa.bookmanager.domain;
 
 import com.fastcampus.jpa.bookmanager.domain.listener.Auditable;
-import com.fastcampus.jpa.bookmanager.domain.listener.UserEntityListener;
-import lombok.*;
+import lombok.Data;
+import lombok.EqualsAndHashCode;
+import lombok.NoArgsConstructor;
+import lombok.ToString;
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.LastModifiedDate;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
@@ -10,47 +12,36 @@ import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 import javax.persistence.*;
 import java.time.LocalDateTime;
 
-
+@Entity
 @NoArgsConstructor
-@AllArgsConstructor
-@RequiredArgsConstructor
 @Data
 @ToString(callSuper = true)
 @EqualsAndHashCode(callSuper = true)
-@Builder
-@Entity
-// DB에 맡기고 indexes 나 uniqueContraints 적지 않는 경우가 많다
-@Table(name = "user", indexes = {@Index(columnList = "name")}, uniqueConstraints = {@UniqueConstraint(columnNames = "email")})
-@EntityListeners(value = UserEntityListener.class)
-public class User extends BaseEntity {
+public class Book extends BaseEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @NonNull
     private String name;
 
-    @Enumerated(value = EnumType.STRING)
-    private Gender gender;
+    private String category;
 
-    @NonNull
-    private String email;
+    private Long authorId;
 
-    // Colum의 이름을 별도로 설정해주게 되면 실제 변수는 더 잘 알아볼수 있는 변수로 설정가능하다.
-    // query 생성시 작동한다.
-//    @Column(updatable = false)
+    private Long publisherId;
+
+    @OneToOne
+    private BookReviewInfo bookReviewInfo;
+
+}
+
+
 //    @CreatedDate
 //    private LocalDateTime createdAt;
 //
 //    @LastModifiedDate
 //    private LocalDateTime updatedAt;
-
-//    @Transient
-//    private String testData;
-
-//    @OneToMany(fetch = FetchType.EAGER)
-//    private List<Address> addressList;
 
 //    @PrePersist
 //    public void prePersist() {
@@ -62,6 +53,3 @@ public class User extends BaseEntity {
 //    public void preUpdate() {
 //        this.updatedAt = LocalDateTime.now();
 //    }
-
-}
-

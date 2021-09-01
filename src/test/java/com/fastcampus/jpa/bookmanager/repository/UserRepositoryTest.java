@@ -1,5 +1,6 @@
 package com.fastcampus.jpa.bookmanager.repository;
 
+import com.fastcampus.jpa.bookmanager.domain.Gender;
 import com.fastcampus.jpa.bookmanager.domain.User;
 import org.assertj.core.util.Lists;
 import org.junit.jupiter.api.Test;
@@ -15,6 +16,9 @@ class UserRepositoryTest {
 
     @Autowired
     private UserRepository userRepository;
+
+    @Autowired
+    private UserHistoryRepository userHistoryRepository;
 
     @Test
     void crud() { // create, read, update, delete
@@ -110,11 +114,11 @@ class UserRepositoryTest {
 
     @Test
     void select() {
-        userRepository.saveAndFlush(new User(1L,"martin", "martin@fastcampus.com", LocalDateTime.now(), LocalDateTime.now()));
-        userRepository.saveAndFlush(new User(2L,"karis", "karis@fastcampus.com", LocalDateTime.now(), LocalDateTime.now()));
-        userRepository.saveAndFlush(new User(3L,"lottin", "lottin@fastcampus.com", LocalDateTime.now(), LocalDateTime.now()));
-        userRepository.saveAndFlush(new User(4L,"rise", "rise@fastcampus.com", LocalDateTime.now(), LocalDateTime.now()));
-        userRepository.saveAndFlush(new User(5L,"martin", "martin131@fastcampus.com", LocalDateTime.now(), LocalDateTime.now()));
+//        userRepository.saveAndFlush(new User(1L,"martin", "martin@fastcampus.com", LocalDateTime.now(), LocalDateTime.now()));
+//        userRepository.saveAndFlush(new User(2L,"karis", "karis@fastcampus.com", LocalDateTime.now(), LocalDateTime.now()));
+//        userRepository.saveAndFlush(new User(3L,"lottin", "lottin@fastcampus.com", LocalDateTime.now(), LocalDateTime.now()));
+//        userRepository.saveAndFlush(new User(4L,"rise", "rise@fastcampus.com", LocalDateTime.now(), LocalDateTime.now()));
+//        userRepository.saveAndFlush(new User(5L,"martin", "martin131@fastcampus.com", LocalDateTime.now(), LocalDateTime.now()));
 
         System.out.println("---------------------------------------------------------------------");
         System.out.println("---------------------------------------------------------------------");
@@ -163,11 +167,11 @@ class UserRepositoryTest {
 
     @Test
     void pagingAndsortingTest() {
-        userRepository.saveAndFlush(new User(1L,"martin", "martin@fastcampus.com", LocalDateTime.now(), LocalDateTime.now()));
-        userRepository.saveAndFlush(new User(2L,"karis", "karis@fastcampus.com", LocalDateTime.now(), LocalDateTime.now()));
-        userRepository.saveAndFlush(new User(3L,"lottin", "lottin@fastcampus.com", LocalDateTime.now(), LocalDateTime.now()));
-        userRepository.saveAndFlush(new User(4L,"rise", "rise@fastcampus.com", LocalDateTime.now(), LocalDateTime.now()));
-        userRepository.saveAndFlush(new User(5L,"martin", "martin131@fastcampus.com", LocalDateTime.now(), LocalDateTime.now()));
+//        userRepository.saveAndFlush(new User(1L,"martin", "martin@fastcampus.com", LocalDateTime.now(), LocalDateTime.now()));
+//        userRepository.saveAndFlush(new User(2L,"karis", "karis@fastcampus.com", LocalDateTime.now(), LocalDateTime.now()));
+//        userRepository.saveAndFlush(new User(3L,"lottin", "lottin@fastcampus.com", LocalDateTime.now(), LocalDateTime.now()));
+//        userRepository.saveAndFlush(new User(4L,"rise", "rise@fastcampus.com", LocalDateTime.now(), LocalDateTime.now()));
+//        userRepository.saveAndFlush(new User(5L,"martin", "martin131@fastcampus.com", LocalDateTime.now(), LocalDateTime.now()));
 
         System.out.println("---------------------------------------------------------------------");
         System.out.println("---------------------------------------------------------------------");
@@ -183,6 +187,108 @@ class UserRepositoryTest {
 
         // 페이지 기반 쿼리메소드 getTotalElements, getContent 값을 사용
         System.out.println("findByNameWithPaging : " + userRepository.findByName("martin", PageRequest.of(1, 1, Sort.by(Sort.Order.desc("id")))).getTotalElements());
+
+    }
+
+
+    @Test
+    void insertAndUpdateTest() {
+
+
+        User user = new User();
+        user.setName("martin");
+        user.setEmail("martin@fastcampus.com");
+        userRepository.save(user);
+
+        User user2 = userRepository.findById(1L).orElseThrow(RuntimeException::new);
+        user2.setName("marrrtint");
+        userRepository.save(user2);
+
+    }
+
+    @Test
+    void enumTest() {
+        userRepository .saveAndFlush(new User("martin", "martin@fastcampus.com"));
+        userRepository.saveAndFlush(new User("karis", "karis@fastcampus.com"));
+        userRepository.saveAndFlush(new User("lottin", "lottin@fastcampus.com"));
+        userRepository.saveAndFlush(new User("rise", "rise@fastcampus.com"));
+        userRepository.saveAndFlush(new User("martin", "martin131@fastcampus.com"));
+
+        System.out.println("---------------------------------------------------------------------");
+        System.out.println("---------------------------------------------------------------------");
+        System.out.println("---------------------------------------------------------------------");
+
+        User user = userRepository.findById(1L).orElseThrow(RuntimeException::new);
+        user.setGender(Gender.MALE);
+
+        userRepository.save(user);
+        userRepository.findAll().forEach(System.out::println);
+
+        System.out.println(userRepository.findRowRecord().get("gender"));
+    }
+
+    @Test
+    void listenerTest() {
+        User user = new User();
+        user.setEmail("martin2@fastcampus.com");
+        user.setName("martin");
+
+        userRepository.save(user);
+
+        User user2 = userRepository.findById(1L).orElseThrow(RuntimeException::new);
+        user2.setName("marttinss");
+
+        userRepository.save(user2);
+
+        userRepository.deleteById(1L);
+    }
+
+    @Test
+    void prePersisTest() {
+
+        User user = new User();
+        user.setEmail("martin2@fastcampus.com");
+        user.setName("martin");
+
+        userRepository.save(user);
+
+        System.out.println(userRepository.findByEmail("martin2@fastcampus.com"));
+    }
+
+    @Test
+    void preUpdateTest() {
+        User user = new User();
+        user.setEmail("martin2@fastcampus.com");
+        user.setName("martin");
+
+        userRepository.save(user);
+
+        System.out.println(userRepository.findByName("martin"));
+
+        System.out.println("---------------------------------------------------------------------");
+        System.out.println("---------------------------------------------------------------------");
+        System.out.println("---------------------------------------------------------------------");
+
+        User user2 = userRepository.findById(1L).orElseThrow(RuntimeException::new);
+        user2.setName("marttinss");
+
+        userRepository.save(user2);
+
+        System.out.println(userRepository.findByName("marttinss"));
+    }
+
+    @Test
+    void userHistoryTest() {
+        User user = new User();
+        user.setEmail("martin-new@fastcampus.com");
+        user.setName("martin-new");
+        userRepository.save(user);
+
+        user.setName("martin-new-new");
+
+        userRepository.save(user);
+
+        userHistoryRepository.findAll().forEach(System.out::println);
 
     }
 
