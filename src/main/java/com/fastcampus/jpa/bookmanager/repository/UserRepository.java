@@ -17,7 +17,7 @@ import java.util.Set;
 public interface UserRepository extends JpaRepository<User, Long> {
 
     // 쿼리 메소드 1 실습
-    Set<User> findByName(String name);
+    User findByName(String name);
     User findByEmail(String email);
     User getByEmail(String email);
     User readByEmail(String email);
@@ -63,9 +63,5 @@ public interface UserRepository extends JpaRepository<User, Long> {
 
     @Query(value = "select * from user limit 1;", nativeQuery = true)
     Map<String, Object> findRowRecord();
-
-
-
-
 
 }

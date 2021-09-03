@@ -24,6 +24,11 @@
 > 11. AuditingEntityListener.class
 > 12. @MappedSuperclass
 
+### 5. 연관관계 살펴보기
+> 1. @OneToOne
+> 2. @OneToMany
+> 3. @JoinColumn(name = "user_id", insertable = false, updatable = false)
+
     
     
     

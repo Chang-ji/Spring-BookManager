@@ -11,6 +11,10 @@ import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 import javax.persistence.*;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Collections;
+import java.util.List;
 
 @Entity
 @NoArgsConstructor
@@ -29,12 +33,41 @@ public class Book extends BaseEntity {
 
     private Long authorId;
 
-    private Long publisherId;
+    //private Long publisherId;
 
-    @OneToOne
+    @OneToOne (mappedBy = "book")
+    @ToString.Exclude
     private BookReviewInfo bookReviewInfo;
 
+    @OneToMany
+    @JoinColumn(name = "book_id")
+    @ToString.Exclude
+    private List<Review> reviews = new ArrayList<>();
+
+    @ManyToOne
+    @ToString.Exclude
+    private Publisher publisher;
+
+//    @ManyToMany
+    @OneToMany
+    @JoinColumn(name = "book_id")
+    @ToString.Exclude
+    private List<BookAndAuthor> bookAndAuthors = new ArrayList<>();
+
+    public void addBookAndAuthors(BookAndAuthor... bookAndAuthors) {
+        Collections.addAll(this.bookAndAuthors, bookAndAuthors);
+    }
+
 }
+
+    // User
+    // user_products -> order
+    // Product
+    // N-N 관계는 1-N N-1 로 나누어서 작성 할 수 있다.
+
+
+
+
 
 
 //    @CreatedDate

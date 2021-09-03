@@ -9,8 +9,11 @@ import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 import javax.persistence.*;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
 
-
+// DB에 맡기고 indexes 나 uniqueContraints 적지 않는 경우가 많다
+//@Table(name = "user", indexes = {@Index(columnList = "name")}, uniqueConstraints = {@UniqueConstraint(columnNames = "email")})
 @NoArgsConstructor
 @AllArgsConstructor
 @RequiredArgsConstructor
@@ -19,8 +22,6 @@ import java.time.LocalDateTime;
 @EqualsAndHashCode(callSuper = true)
 @Builder
 @Entity
-// DB에 맡기고 indexes 나 uniqueContraints 적지 않는 경우가 많다
-@Table(name = "user", indexes = {@Index(columnList = "name")}, uniqueConstraints = {@UniqueConstraint(columnNames = "email")})
 @EntityListeners(value = UserEntityListener.class)
 public class User extends BaseEntity {
 
@@ -37,8 +38,17 @@ public class User extends BaseEntity {
     @NonNull
     private String email;
 
-    // Colum의 이름을 별도로 설정해주게 되면 실제 변수는 더 잘 알아볼수 있는 변수로 설정가능하다.
-    // query 생성시 작동한다.
+    @OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.REFRESH )
+    @JoinColumn(name = "user_id")
+    @ToString.Exclude
+    private List<UserHistory> userHistories = new ArrayList<>();
+
+    @OneToMany
+    @ToString.Exclude
+    private List<Review> reviews = new ArrayList<>();
+
+// Colum의 이름을 별도로 설정해주게 되면 실제 변수는 더 잘 알아볼수 있는 변수로 설정가능하다.
+// query 생성시 작동한다.
 //    @Column(updatable = false)
 //    @CreatedDate
 //    private LocalDateTime createdAt;

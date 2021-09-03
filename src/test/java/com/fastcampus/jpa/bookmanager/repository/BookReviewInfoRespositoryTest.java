@@ -5,10 +5,12 @@ import com.fastcampus.jpa.bookmanager.domain.BookReviewInfo;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.transaction.annotation.Transactional;
 
 import static org.junit.jupiter.api.Assertions.*;
 
 @SpringBootTest
+@Transactional
 class BookReviewInfoRespositoryTest {
 
     @Autowired
@@ -18,6 +20,7 @@ class BookReviewInfoRespositoryTest {
     private BookRepository bookRepository;
 
     @Test
+    @Transactional
     void crudTest() {
         BookReviewInfo bookReviewInfo = new BookReviewInfo();
 //        bookReviewInfo.setBookId(1L);
@@ -35,18 +38,25 @@ class BookReviewInfoRespositoryTest {
         givenBookReviewInfo();
 
         Book result = bookReviewInfoRespository
-                        .findById(1L)
+                        .findById(2L)
                         .orElseThrow(RuntimeException::new)
                         .getBook();
 
-        System.out.println(result);
+        System.out.println(" >>> " + result);
+
+        BookReviewInfo result2 = bookRepository
+                .findById(1L)
+                .orElseThrow(RuntimeException::new)
+                .getBookReviewInfo();
+
+        System.out.println(result2);
     }
 
     private Book givenBook() {
         Book book = new Book();
         book.setName("Jpa 초격차 패키지");
         book.setAuthorId(1L);
-        book.setPublisherId(1L);
+        // book.setPublisherId(1L);
 
         return bookRepository.save(book);
     }
@@ -59,6 +69,6 @@ class BookReviewInfoRespositoryTest {
 
         bookReviewInfoRespository.save(bookReviewInfo);
 
-        System.out.println(" >>> : " + bookReviewInfoRespository.findAll());
+        bookReviewInfoRespository.findAll().forEach(System.out::println);
     }
 }

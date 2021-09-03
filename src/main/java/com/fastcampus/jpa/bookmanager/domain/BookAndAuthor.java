@@ -12,19 +12,18 @@ import javax.persistence.*;
 @Data
 @ToString(callSuper = true)
 @EqualsAndHashCode(callSuper = true)
-public class BookReviewInfo extends BaseEntity{
+public class BookAndAuthor extends BaseEntity{
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long Id;
+    private Long id;
 
-//    private Long bookId;
-
-    @OneToOne
+    @ManyToOne
     private Book book;
 
-    //평점과 리뷰 수에 Null 인것에 따라서 Type 고르기 Fgloat vs float, Integer vs int
-    private float averageReviewScore;
+    @ManyToOne
+    private Author author;
 
-    private int reviewCount;
+
+
 }
