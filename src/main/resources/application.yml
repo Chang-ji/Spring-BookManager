@@ -11,9 +11,10 @@ spring:
     hibernate:
       ddl-auto: create-drop
   datasource:
-    url: jdbc:mysql://localhost:3306/springbootjpa?serverTimezone=Asia/Seoul&characterEncoding=UTF-8
+    url: jdbc:mysql://localhost:3306/book_manager?serverTimezone=Asia/Seoul&characterEncoding=UTF-8
     username: root
     password: dmatjdeh7253*
     initalization-mode: always
+    driver-class-name: com.mysql.cj.jdbc.Driver
 server:
   port: 8070
