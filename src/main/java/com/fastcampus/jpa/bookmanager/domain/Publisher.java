@@ -22,9 +22,17 @@ public class Publisher extends BaseEntity{
 
     private String name;
 
-    @OneToMany
+    // 연관관계를 null 변경하면 연관관계가 끊어진다. 이때 orphanRemoval을 true 설정하면 db에서 연관관계 끊어지기 전 값들도 다 제거된다.
+    @OneToMany(orphanRemoval = false)
     @JoinColumn(name="publisher_id")
+    @ToString.Exclude
     private List<Book> books = new ArrayList<>();
+
+
+
+    public void addBook(Book book) {
+        this.books.add(book);
+    }
 
 
 }
